@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>jQuery UI Autocomplete - Default functionality</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="/resources/demos/style.css">
+  <link rel="stylesheet" href="stlye.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+  <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <script src="script.js"></script>
+  <script src="code.js"></script>
+  google.script.run.withSuccessHandler(buildTagList)
+      .getItems();
+
+  </script>
+</head>
+<body>
+<div id="dots" class="spinner" style="display:none;">
+  <div class="bounce1"></div>
+  <div class="bounce2"></div>
+  <div class="bounce3"></div>
+</div>
+<div class="container-fluid" id="formDiv">
+  <form onsubmit="retrieveData(); event.preventDefault();">
+    <div class="form-group">
+      <div class="form-row">
+        <div class="ui-widget">
+          <label for="item" class="form-label">Sticker</label>
+          <input id="item" type="text" class="form-control" required>
+        </div>
+      </div>
+      <div class="container-fluid form-row">
+        <div class="form-group col-xs-6">
+          <label for="printAmountInput" class="form-label">Copies</label>
+          <input type="number" id="printAmountInput" min="1" value="1" pattern="\d*" class="form-control" onfocus="this.value=''" required>
+        </div>
+        <div class="form-group col-xs-6">
+          <label for="initials" class="form-label">Inititials</label>
+          <input id="init" type="text" class="form-control" required> 
+        </div>
+      </div>
+    </div>
+    <div class="form-row" id="printFormBtns">
+      <div class="form-group col-xs-6">
+        <input id="printBtn" type="submit" value="Print" class="btn btn-primary btn-lg">
+      </div>
+      <div class="form-group col-xs-6">
+        <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#addModal">Add</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div id="customBtn" >
+  <button type="button" class="btn btn-default btn-lg" data-toggle="modal" data-target="#customModal">Custom Label</button>
+</div>
+
+<br>
+<p id="printerInfo"> Please select which printer you would like to print to. </p>
+
+
+
+<div id="addModal" class="modal fade" role="dialog">
+
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Add New Item</h4>
+      </div>
+
+      <div class="modal-body container-fluid" >
+
+        <div id="dots1" class="spinner" style="display:none;">
+          <div class="bounce1"></div>
+          <div class="bounce2"></div>
+          <div class="bounce3"></div>
+        </div>
+        <form id="addForm">
+          <div class="form-row">
+          <div class="form-group">
+              <input id="nameToAdd" type="text" placeholder="Item Name" class="form-control">
+          </div>
+          </div>
+          <div class="form-row">
+          <div class="form-group">
+              <select id="catForNewItem" class="form-control">
+                <option>	Bar Items	</option>
+                <option>	Breads	</option>
+                <option>	Cheese	</option>
+                <option>	Dairy	</option>
+                <option>	Dressing	</option>
+                <option>	Greens	</option>
+                <option>	Herbs	</option>
+                <option>	Jam and Jelly	</option>
+                <option>	Juices	</option>
+                <option>	Meats and Proteins	</option>
+                <option selected>	Misc	</option>
+                <option>	Poultry	</option>
+                <option>	Prepped Items	</option>
+                <option>	Produce	</option>
+                <option>	Sauces and Dressings	</option>
+                <option>	Soups	</option>
+                <option>	Starches and Grains	</option>
+                <option>	Toppings	</option>
+                <option>	Vegetables	</option>
+              </select>
+          </div>
+          </div>
+
+              <div class="form-row">
+                <div class="form-group col-xs-4">
+                  <input id="timeAmt" type="number" min="1" value="2" pattern="\d*" class="form-control" onfocus="this.value=''">
+                </div>  
+                <div class="form-group col-xs-4">  
+                  <select id="timeDenom" class="form-control">
+                    <option>	Days	</option>
+                    <option selected>	Weeks	</option>
+                    <option>	Months	</option>
+                    <option>	Years	</option>
+                  </select>
+                </div>
+                <div class="form-group col-xs-4">
+                  <input id="addInit" type="text" class="form-control" placeholder="Inititials"> 
+                </div>
+              </div>
+        </form>
+        <br>
+        <br>
+      </div>
+      <div class="modal-footer">
+          <span id="addReq" class="fillRequired" style='display: none;'>** Please fill out all feilds **</span>
+          <button type="submit" class="btn btn-success" onclick="addToDB()">Submit</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="customModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Custom label</h4>
+      </div>
+      <div class="modal-body">
+        <div id="dots2" class="spinner" style="display:none;">
+          <div class="bounce1"></div>
+          <div class="bounce2"></div>
+          <div class="bounce3"></div>
+        </div>
+          <form >
+            <div class="form-row">
+              <div class="form-group">
+                <input id="customName" type="text" placeholder="Item Name" class="form-control">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-xs-4">
+                <label for="customExp">Exp Date: </label>
+                <input id="customExp" type="date" class="form-control">
+              </div>
+              <div class="form-group col-xs-4">
+                <label for="customInit">Initials:</label>
+                <input id="customInit" type="text" placeholder="Initials" class="form-control" required>
+              </div>
+              <div class="form-group col-xs-4">
+                <label for="customPrintAmt">Copies:</label>
+                <input type="number" id="customPrintAmt" min="1" value="1" pattern="\d*" class="form-control" onfocus="this.value=''">
+              </div>
+            </div>
+            <br>
+            <br>
+            <br>
+          </form>
+      </div>
+      <div class="modal-footer">
+        <span id="customReq" class="fillRequired" style='display: none;'>** Please fill out initials **</span>
+        <button type="submit" class="btn btn-success" onclick="handleCustom()">Print</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+    </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="btn-group btn-group-toggle btn-group-lg btn-group-justified" data-toggle="buttons" onchange="getSnFromBtn()">
+  <label class="btn btn-default active">
+    <input type="radio" name="printOptions" id="option1" value="5********" checked> Restaurant
+  </label>
+  <label class="btn btn-default">
+    <input type="radio" name="printOptions" id="option2" value="5********"> Basement
+  </label>
+</div>
+
+</body>
+</html>
+
